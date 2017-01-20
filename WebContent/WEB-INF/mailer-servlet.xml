@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.directwebremoting.org/schema/spring-dwr
+http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+
+    <!-- Scan the base package given the names -->
+    <!-- basically defines the context where spring can find all the
+     source files -->
+    <context:component-scan base-package="web"/>
+
+    <bean id="mailerMultiActionController"
+          class="web.com.sidmishraw.mailer.web.controller.MailerMultiActionController"/>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="alwaysUseFullPath" value="true"/>
+        <property name="mappings">
+            <props>
+                <prop key="welcome/*.mailer">mailerMultiActionController</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Used for resolving the internal paths-->
+    <bean id="URLMethodNameReolver"
+          class="org.springframework.web.servlet.mvc.multiaction.InternalPathMethodNameResolver">
+    </bean>
+
+    <!-- Used for resolving the internal paths and prefixing and suffixing to JSP files (relative pathing)-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass">
+            <value>
+                org.springframework.web.servlet.view.JstlView
+            </value>
+        </property>
+        <property name="prefix">
+            <value>/WEB-INF/jsp/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+
+    <bean id="paramResolver" class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+        <property name="paramName">
+            <value>action</value>
+        </property>
+    </bean>
+
+</beans>
